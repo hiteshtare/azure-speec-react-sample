@@ -31,6 +31,12 @@ export default class App extends Component {
         const speechConfig = speechsdk.SpeechConfig.fromAuthorizationToken(tokenObj.authToken, tokenObj.region);
         speechConfig.speechRecognitionLanguage = 'en-US';
         
+        //Custom Speech endpoint Id
+        // speechConfig.endpointId = 'edeb24bf-5178-4fcc-b05d-83a948d846ef';
+
+        //New endpoint
+        speechConfig.endpointId = '813293e0-5ec8-4327-b403-3f15d6d4683e';
+        
         const audioConfig = speechsdk.AudioConfig.fromDefaultMicrophoneInput();
         const recognizer = new speechsdk.SpeechRecognizer(speechConfig, audioConfig);
 
@@ -52,35 +58,38 @@ export default class App extends Component {
         });
     }
 
-    async fileChange(event) {
-        const audioFile = event.target.files[0];
-        console.log(audioFile);
-        const fileInfo = audioFile.name + ` size=${audioFile.size} bytes `;
+    // async fileChange(event) {
+    //     const audioFile = event.target.files[0];
+    //     console.log(audioFile);
+    //     const fileInfo = audioFile.name + ` size=${audioFile.size} bytes `;
 
-        this.setState({
-            displayText: fileInfo
-        });
+    //     this.setState({
+    //         displayText: fileInfo
+    //     });
 
-        const tokenObj = await getTokenOrRefresh();
-        const speechConfig = speechsdk.SpeechConfig.fromAuthorizationToken(tokenObj.authToken, tokenObj.region);
-        speechConfig.speechRecognitionLanguage = 'en-US';
+    //     const tokenObj = await getTokenOrRefresh();
+    //     const speechConfig = speechsdk.SpeechConfig.fromAuthorizationToken(tokenObj.authToken, tokenObj.region);
+    //     speechConfig.speechRecognitionLanguage = 'en-US';
 
-        const audioConfig = speechsdk.AudioConfig.fromWavFileInput(audioFile);
-        const recognizer = new speechsdk.SpeechRecognizer(speechConfig, audioConfig);
+    //     //Custom Speech endpoint Id
+    //     speechConfig.endpointId = 'edeb24bf-5178-4fcc-b05d-83a948d846ef';
 
-        recognizer.recognizeOnceAsync(result => {
-            let displayText;
-            if (result.reason === ResultReason.RecognizedSpeech) {
-                displayText = `RECOGNIZED: Text=${result.text}`
-            } else {
-                displayText = 'ERROR: Speech was cancelled or could not be recognized. Ensure your microphone is working properly.';
-            }
+    //     const audioConfig = speechsdk.AudioConfig.fromWavFileInput(audioFile);
+    //     const recognizer = new speechsdk.SpeechRecognizer(speechConfig, audioConfig);
 
-            this.setState({
-                displayText: fileInfo + displayText
-            });
-        });
-    }
+    //     recognizer.recognizeOnceAsync(result => {
+    //         let displayText;
+    //         if (result.reason === ResultReason.RecognizedSpeech) {
+    //             displayText = `RECOGNIZED: Text=${result.text}`
+    //         } else {
+    //             displayText = 'ERROR: Speech was cancelled or could not be recognized. Ensure your microphone is working properly.';
+    //         }
+
+    //         this.setState({
+    //             displayText: fileInfo + displayText
+    //         });
+    //     });
+    // }
 
     render() {
         return (
@@ -92,7 +101,7 @@ export default class App extends Component {
                         <i className="fas fa-microphone fa-lg mr-2" onClick={() => this.sttFromMic()}></i>
                         Convert speech to text from your mic.
 
-                        <div className="mt-2">
+                        {/* <div className="mt-2">
                             <label htmlFor="audio-file"><i className="fas fa-file-audio fa-lg mr-2"></i></label>
                             <input 
                                 type="file" 
@@ -101,7 +110,7 @@ export default class App extends Component {
                                 style={{display: "none"}} 
                             />
                             Convert speech to text from an audio file.
-                        </div>
+                        </div> */}
                     </div>
                     <div className="col-6 output-display rounded">
                         <code>{this.state.displayText}</code>
